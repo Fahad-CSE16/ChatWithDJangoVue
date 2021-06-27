@@ -9,6 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 class MessageSerializer(serializers.ModelSerializer):
     fruser=UserSerializer(read_only=True)
+    touser=UserSerializer(read_only=True)
     class Meta:
         model=ChatMessage
         fields=('msg','created_at','touser','fruser')
