@@ -2,10 +2,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from chat.views import homeview
+from chat.views import userlistview
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', homeview,name='home'),
+    path('', userlistview,name='home'),
     path('chats/', include('chat.urls')),
     path('api/', include('rest_framework.urls')),
 ]

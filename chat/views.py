@@ -93,7 +93,9 @@ def LogoutView(request):
     logout(request)
     messages.success(request, "Successfully logged out!")
     return redirect('home')
-
+def userlistview(request):
+    users=User.objects.all().exclude(username = request.user.username)
+    return render(request,'userlist.html',{'users':users})
 class UserListView(ListView):
     model=User
     context_object_name='users'

@@ -1,8 +1,11 @@
 {% extends 'basic.html' %}
 {% block body %}
-
+{% if user.is_authenticated %}
 {% for u in users %}
-Chat With : <a href="/chats/chatpage/{{u.id}}/">{{u.username}}</a>
+<h1 class="text-white">Chat With : <a href="/chats/chatpage/{{u.id}}/">{{u.username}}</a></h1>
 
 {% endfor %}
+{% else %}
+<h1 class = "text-white">Please Login to chat with Someone</h1>
+{% endif %}
 {% endblock body %}
