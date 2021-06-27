@@ -1,0 +1,99 @@
+{% extends 'basic.html' %}
+
+{% block body %}
+{% load static %}
+<script src="{% static 'vue1/vue.js' %}"></script>
+{{usr.username}}
+{{usr.id}}
+<div id="app">
+<div class="container">
+<div class="row">
+<div class="col-md-6">
+<p v-for="m in messages">
+[[m.fruser.username]]: [[m.msg]]
+</p>
+</div>
+<div class="col-md-6">
+<form @submit.prevent="sendmsg()" class="was-validated">
+            <div class="form-group">
+              <label >Shipping Address</label>
+              <input type="text" class="form-control"
+                name="msg" v-model="msg" required />
+            </div>
+            <button type="submit" class="btn btn-primary">send</button>
+          </form>
+</div>
+
+</div>
+
+</div>
+
+</div>
+{% endblock body %}
+
+{% block js %}
+<script>
+  var app = new Vue({
+    el: '#app',
+    delimiters: ['[[', ']]'],
+    
+    data() {
+      return {
+        showMeassage: false,
+        msg:"",
+        userid: [{{usr.id}}],
+        messages:[],
+      }
+    },
+    mounted: function(){
+      console.log('mounted');
+      this.getmsg();
+
+    },
+    computed:{
+      
+    },
+    methods: {
+      
+      getmsg: function() {
+            var that = this;
+            $.ajax({
+                method: 'GET',
+                url: `/chats/get/${that.userid}/`,
+            }).then(response =>{
+                console.log(response);
+                that.messages = response;
+                console.log(that.messages);
+            }).catch(error => {
+                console.log(error);
+            });
+            setTimeout(() => {
+              that.getmsg();
+            }, 1000)
+        },
+      sendmsg() {
+        console.log('userid:', this.userid);
+        var data = { 'msg': this.msg, 'userid': this.userid};
+        fetch('/chats/send/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify(data)
+
+        })
+          .then((response) => {
+            console.log(response);
+            this.getmsg();
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+      }
+    }
+  })
+
+</script>
+{% endblock  %}

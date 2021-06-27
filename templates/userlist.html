@@ -1,0 +1,8 @@
+{% extends 'basic.html' %}
+{% block body %}
+
+{% for u in users %}
+Chat With : <a href="/chats/chatpage/{{u.id}}/">{{u.username}}</a>
+
+{% endfor %}
+{% endblock body %}
